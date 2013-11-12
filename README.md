@@ -1,8 +1,30 @@
-[![NPM version](https://badge.fury.io/js/markdown.png)](http://badge.fury.io/js/markdown)
-[![Build Status](https://secure.travis-ci.org/evilstreak/markdown-js.png)](https://travis-ci.org/evilstreak/markdown-js)
-[![Dependency Status](https://gemnasium.com/evilstreak/markdown-js.png)](https://gemnasium.com/evilstreak/markdown-js)
-
 # markdown-js
+
+# Conde style
+
+
+For Conde purposes, this library has a single method, `parseConde`
+
+```javascript
+var markdown = require('markdown');
+var parseConde = markdown.parseConde;
+
+var text = '[#video: http://www.hulu.com/embed.html?eid=2o_p27qiikcatio-puudaa](500x1000)';
+var data = {};
+
+var output = parseConde(text, {
+    video: function(meta, data){
+      var html =  "<iframe height="+meta.height+" width="+meta.width
+                    + " src='"+meta.uri+"'></iframe>";
+      return html;
+    }
+  }, data);
+
+// output ===
+// <iframe height=1000 width=1000 src='http://www.hulu.com/embed.html?eid=2o_p27qiikcatio-puudaa'></iframe>"
+
+```
+
 
 Yet another markdown parser, this time for JavaScript. There's a few
 options that precede this project but they all treat markdown to HTML

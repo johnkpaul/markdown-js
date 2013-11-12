@@ -1,4 +1,6 @@
+var parse_conde = require("../src/parse_conde");
 var markdown = require("../src/markdown");
+var prettyhtml = require("html").prettyPrint;
 
 function test_dialect( dialect, features ) {
   var fs = require("fs"),
@@ -43,16 +45,16 @@ function test_dialect( dialect, features ) {
                 text = slurpFile( testFileBase + ".text" );
 
             // load the target output
-            var json = JSON.parse( slurpFile( testFileBase + ".json" ) );
+            var html = slurpFile( testFileBase + ".html" );
 
-            var output = markdown.toHTMLTree( text, dialect, {
-              embeds: {
-                video: function(data){
-                  return '<video id='+data.id+'></video>';
-                }
-              }
-            });
-            tap.equivalent( output, json, testName, {todo: isFile( testFileBase + ".todo" )} );
+            var convertors = {};
+            convertors[feature] = require(testFileBase + ".js");
+
+            var data = {};
+
+            var outputHtml = parse_conde( text, convertors, data);
+
+            tap.equivalent( prettyhtml(outputHtml), prettyhtml(html), testName, {todo: isFile( testFileBase + ".todo" )} );
           }
           tap.end();
         } );
@@ -65,7 +67,7 @@ function test_dialect( dialect, features ) {
 
 var dialects = {};
 dialects.Conde = [];
-dialects.Conde.push( "videos" );
+dialects.Conde.push( "video" );
 
 test_dialect( 'Conde', dialects[ 'Conde' ] );
 
