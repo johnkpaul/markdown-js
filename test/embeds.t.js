@@ -49,8 +49,8 @@ function test_dialect( dialect, features ) {
 
             var convertors = {};
             convertors[feature] = require(testFileBase + ".js");
+            var data = require(testFileBase + ".json");
 
-            var data = {};
 
             var outputHtml = parse_conde( text, convertors, data);
 
@@ -68,6 +68,7 @@ function test_dialect( dialect, features ) {
 var dialects = {};
 dialects.Conde = [];
 dialects.Conde.push( "video" );
+dialects.Conde.push( "gallery" );
 
 test_dialect( 'Conde', dialects[ 'Conde' ] );
 
