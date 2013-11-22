@@ -32,6 +32,27 @@ define(['../markdown_helpers', './dialect_helpers', './gruber', '../parser'], fu
     }
   };
 
+  Conde.block.gallery = function gallery ( block ) {
+    var converter = Conde.embedConverters.gallery;
+    var data = Conde.data;
+    if(/#gallery:/.test(block)){
+      var matches = block.match(/\[#gallery:\s?(\S+)\]\|\|\|([\S\s]*)\|\|\|/);
+      var url = matches[1];
+      var innermarkdown = matches[2];
+      var caption = Markdown.toHTML(innermarkdown);
+      var html = converter({
+                  url: url,
+                  caption: caption,
+                }, data);
+      var jsonml = jsonmlFromHTMLText(html).filter(function(el){console.log(el);return el !== "";});
+      console.log(html);
+
+      return jsonml;
+    }
+    else{
+      return undefined;
+    }
+  };
 
   Markdown.dialects.Conde = Conde;
   Markdown.dialects.Conde.inline.__escape__ = /^\\[\\`\*_{}\[\]()#\+.!\-|:]/;
